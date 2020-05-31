@@ -1,0 +1,106 @@
+ToDo 1: What is the data type of s? Can it be changed?
+print(s.dtype)
+# The data type of s is returned as object. which is used to text or mixed numeric and non-numeric values
+#It can be changed Using DataFrame.astype() etc
+
+ToDo 2: Comment on the shape of the data frame with and without setting names.
+
+a.)without setting names
+df = pd.read_csv('sampleDataSet.csv')
+
+#shape=(99, 9)
+#[99 rows x 9 columns]
+#raws=99 and columns=9
+#no column names
+
+b)with names
+
+# df = pd.read_csv("sampleDataSet.csv", names=[
+#              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'])  # setting names
+
+    5.1  0.222222222       3.5     0.625       1.4  0.06779661   0.2  0.041666667     setosa
+0   4.9     0.166667  3.000000  0.416667  1.400000    0.067797  0.20  0.041666667     setosa
+1   4.7     0.111111  3.200000  0.500000  1.300000         NaN  0.20  0.041666667     setosa
+2   4.6     0.083333  3.100000  0.458333  1.500000    0.084746  0.20  0.041666667     setosa
+3   NaN     0.194444  3.600000  0.666667  1.400000         NaN  0.20  0.041666667     setosa
+
+
+#(100, 9)
+#[100 rows x 9 columns]
+#raws -100 and coloumns 9
+#here column names are given by the a b c
+#therefore an extra raw is added
+      a         b         c         d         e         f     g            h          i
+0   5.1  0.222222  3.500000  0.625000  1.400000  0.067797  0.20  0.041666667     setosa
+1   4.9  0.166667  3.000000  0.416667  1.400000  0.067797  0.20  0.041666667     setosa
+2   4.7  0.111111  3.200000  0.500000  1.300000       NaN  0.20  0.041666667     setosa
+
+
+4.3 Try Out
+
+
+1. Load the Lab02Ecercise01.csv file and specify the column names as : Chanel1, Chanel2, Chanel3, Chanel4 and Chanel5
+
+df = pd.read_csv("lab02Exercise01.csv", names=[
+                 "Chanel1", "Chanel2", "Chanel3", "Chanel4", "Chanel5"])
+print(df)
+
+       Chanel1   Chanel2   Chanel3   Chanel4   Chanel5
+0     -0.022098 -0.135461 -0.100475 -0.014574  0.036626
+1     -0.021707 -0.164396 -0.106911 -0.027774 -0.045130
+2           NaN -0.107590 -0.044757 -0.040040 -0.080305
+3      0.014929 -0.016449 -0.001463 -0.045280  0.000612
+
+2.
+
+#mean value of the column is calculated. Eg:mean_value = df["Chanel1"].mean()
+
+#Then the null/nan values are replaced with that mean value of the column. Eg:df["New_Chanel1"] = df["Chanel1"].fillna(mean_value)
+#Created a new column called "New_Chanel1"
+
+#Like this all columns are filled
+
+Code
+
+# calculate mean value
+mean_value1 = df["Chanel1"].mean()
+mean_value2 = df["Chanel2"].mean()
+mean_value3 = df["Chanel3"].mean()
+mean_value4 = df["Chanel4"].mean()
+mean_value5 = df["Chanel5"].mean()
+
+# replace mean values
+df["New_Chanel1"] = df["Chanel1"].fillna(mean_value1)
+df["New_Chanel2"] = df["Chanel2"].fillna(mean_value2)
+df["New_Chanel3"] = df["Chanel3"].fillna(mean_value3)
+df["New_Chanel4"] = df["Chanel4"].fillna(mean_value4)
+df["New_Chanel5"] = df["Chanel5"].fillna(mean_value5)
+print(df)
+
+3. To see the correlation between one column to all other columns, use following code segment and comment on diagonal plot.
+code
+
+pd.plotting.scatter_matrix(df, alpha=0.2, figsize=(6, 6), diagonal='kde')
+print(df)
+plt.show()
+
+#The scatter matrix is plotting each of the columns specified against each other column.
+# Here in diagonal, you would see a plot of a column against itself. Denisty plot is designed here
+
+4.4. Add a new column named as ”class” on lab02Exercise01 dataset. Values of this column either 1 or 0 which should be derived based on the following condition:
+
+
+# define a function to decide the value of the new column
+
+
+def AddVal(row):
+    if ((row["Chanel1"]+row["Chanel5"])/2) < ((row["Chanel2"]+row["Chanel3"]+row["Chanel4"])/3):
+        return 1
+
+    else:
+        return 0
+
+
+# send row by row into AddVal funtion as add the new value to a seperate column
+df["new_column"] = df.apply(AddVal, axis=1)
+print(df)
